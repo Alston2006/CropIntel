@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Weather Intelligence Core — WI-7200</title>
+
+    <link rel="stylesheet" href="style_log.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+
+    <nav class="main-nav">
+
+        <div class="nav-container">
+
+            <div class="logo">
+                <h1>🌦 Weather Intelligence Core</h1>
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <section class="dashboard-section active">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <h2>Weather Intelligence Core — WI-7200</h2>
+
+            </div>
+
+
+            <!-- Weather Card -->
+
+            <div class="product-card weather-system-card">
+
+                <img src="assets/weather-map.jpg" class="product-image">
+
+                <div class="product-info">
+
+                    <div class="product-name">
+                        Weather Intelligence Core
+                    </div>
+
+                    <div class="product-price">
+                        $2,400 / season
+                    </div>
+
+                    <div class="product-badge">
+                        System Name: WI-7200
+                    </div>
+
+                    <div class="product-details">
+
+                        <p>72-hour predictive modeling</p>
+
+                        <p>500m hyper-local resolution</p>
+
+                        <p>Satellite + IoT fusion intelligence</p>
+
+                    </div>
+
+
+                    <div class="product-actions">
+
+                        <button class="btn-primary" onclick="openWeatherModal()">
+                            System Details
+                        </button>
+
+
+                        <button class="btn-secondary" onclick="openWeatherLive()">
+                            Live Intelligence
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Realtime Data Card -->
+
+            <div class="realtime-card">
+
+                <h3>Realtime Atmospheric Intelligence</h3>
+
+                <div id="weatherData">
+
+                    Loading realtime intelligence...
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- DETAILS MODAL -->
+
+    <div id="weatherModal" class="modal">
+
+        <div class="modal-content">
+
+            <span class="close" onclick="closeWeatherModal()">&times;</span>
+
+            <h2>Weather Intelligence Core — WI-7200</h2>
+
+
+            <h3>Capability Description</h3>
+
+            <p>
+                Real-time atmospheric analysis with 72-hour predictive modeling.
+                Hyper-local weather intelligence using satellite and IoT fusion.
+            </p>
+
+
+            <h3>Data Sources</h3>
+
+            <ul>
+
+                <li>NOAA feeds</li>
+
+                <li>ECMWF models</li>
+
+                <li>Sentinel-2 satellite imagery</li>
+
+                <li>Landsat-9 satellite imagery</li>
+
+                <li>Local IoT weather stations</li>
+
+            </ul>
+
+
+            <h3>Retrieval Pipeline</h3>
+
+            <p>
+                2.4M+ weather datasets indexed. Refresh cycle: 15 minutes.
+            </p>
+
+
+            <h3>Response Intelligence</h3>
+
+            <ul>
+
+                <li>Planting recommendations</li>
+
+                <li>Harvest timing alerts</li>
+
+                <li>Frost alerts</li>
+
+                <li>Irrigation scheduling</li>
+
+                <li>Spray-day prediction</li>
+
+            </ul>
+
+
+            <h3>Deployment Mode</h3>
+
+            <ul>
+
+                <li>Cloud SaaS deployment</li>
+
+                <li>Edge deployment supported</li>
+
+                <li>Realtime API integration</li>
+
+            </ul>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- LIVE IFRAME MODAL -->
+
+    <div id="weatherLiveModal" class="modal">
+
+        <div class="modal-content">
+
+            <span class="close" onclick="closeWeatherLive()">&times;</span>
+
+            <h2>Live Weather Intelligence</h2>
+
+            <!-- Weather Intelligence Map Container -->
+
+            <div class="realtime-card">
+
+                <h3>Live Weather Intelligence Map</h3>
+
+                <iframe src="windy.html" width="100%" height="500" style="border:none;border-radius:12px;">
+                </iframe>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <script src="weather.js"></script>
+
+</body>
+
+</html>
