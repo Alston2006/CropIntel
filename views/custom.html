@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Intelligence — CropIntel</title>
+    <meta name="description"
+        content="Request custom agricultural intelligence. Some farms require deeper insights — built exclusively for your operation.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="page-transition active"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">Crop<span>Intel</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Intelligence Hub</a></li>
+            <li><a href="about.html">Origin</a></li>
+            <li><a href="custom.html" class="active">Custom Intelligence</a></li>
+        </ul>
+        <div class="nav-toggle">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <!-- Custom Hero -->
+    <section class="custom-hero">
+        <div class="custom-content">
+            <p class="section-label reveal">Classified Request</p>
+            <h1 class="reveal reveal-delay-1">Some farms require<br><span style="color:var(--accent);">deeper
+                    intelligence.</span></h1>
+            <p class="reveal reveal-delay-2">
+                Standard modules serve most operations. But your farm may demand something
+                built from the ground up — tailored retrieval pipelines, custom data integrations,
+                and intelligence architectures designed exclusively for your terrain.
+            </p>
+
+            <form class="custom-form reveal reveal-delay-3" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Operative Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Secure Channel</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="farm-size">Operation Scale</label>
+                    <select id="farm-size" name="farm-size">
+                        <option value="" disabled selected>Select operation scale</option>
+                        <option value="small">Small — Under 100 Acres</option>
+                        <option value="medium">Medium — 100–1,000 Acres</option>
+                        <option value="large">Large — 1,000–10,000 Acres</option>
+                        <option value="enterprise">Enterprise — 10,000+ Acres</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="crop-type">Primary Crops</label>
+                    <input type="text" id="crop-type" name="crop-type"
+                        placeholder="e.g., Wheat, Rice, Soybeans, Cotton">
+                </div>
+
+                <div class="form-group">
+                    <label for="intelligence-type">Intelligence Required</label>
+                    <select id="intelligence-type" name="intelligence-type">
+                        <option value="" disabled selected>Select intelligence type</option>
+                        <option value="weather">Weather Intelligence — Custom</option>
+                        <option value="market">Market Intelligence — Custom</option>
+                        <option value="crop">Crop Decision Support — Custom</option>
+                        <option value="full">Full Spectrum — Custom Build</option>
+                        <option value="other">Other — Describe Below</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="brief">Intelligence Brief</label>
+                    <textarea id="brief" name="brief"
+                        placeholder="Describe the intelligence you require. What decisions are you making? What data do you trust? What has failed you before?"></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width:100%; text-align:center;">
+                    Submit Intelligence Request
+                </button>
+            </form>
+
+            <div id="form-success" style="display:none; margin-top:40px;">
+                <p class="section-label" style="color:var(--accent);">Request Received</p>
+                <p style="color:var(--text-secondary); margin-top:12px; font-size:0.9rem;">
+                    Your intelligence request has been classified and queued for review.
+                    A CropIntel operative will reach out within 48 hours via your secure channel.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="nav-logo">Crop<span>Intel</span></div>
+                    <p>AI-Powered Farm Management & Decision Support. Intelligence born from verified data.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigate</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Intelligence Hub</a></li>
+                        <li><a href="about.html">Origin</a></li>
+                        <li><a href="custom.html">Custom Intelligence</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Access</h4>
+                    <ul>
+                        <li><a href="custom.html">Request Intelligence</a></li>
+                        <li><a href="mailto:contact@cropintel.ai">contact@cropintel.ai</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CropIntel. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        function handleSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const success = document.getElementById('form-success');
+            form.style.display = 'none';
+            success.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>
