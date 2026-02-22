@@ -400,15 +400,20 @@
                     const health = await response.json();
                     console.log("[CropIntel] Backend health:", health);
                     
-                    if (!health.api_key_configured) {
-                        setStatus("⚠️ API Key not set", true);
-                        showError("⚠️ Gemini API Key not configured. Please set GEMINI_API_KEY environment variable and restart the backend.");
+                    if (health.ollama_status === "model_missing") {
+                        setStatus("⚠️ Model not found", true);
+                        showError("[WARN] Ollama model not found. Please run: ollama pull " + health.ollama_model);
+                    } else if (health.ollama_status === "disconnected") {
+                        setStatus("⚠️ Ollama offline", true);
+                        showError("[WARN] Ollama server is not running. Please start Ollama or run 'ollama serve' in a new terminal.");
                     } else if (health.database_records === 0) {
                         setStatus("Ready (no data)", true);
-                        showError("⚠️ No market data found. Run market_engine.py to populate the database.");
-                    } else {
+                        showError("[WARN] No market data found. Run market_engine.py to populate the database.");
+                    } else if (health.ollama_status === "ready") {
                         setStatus(`Ready (${health.database_records} records)`);
-                        console.log("[CropIntel] System ready with data");
+                        console.log("[CropIntel] System ready with Ollama + Market Data");
+                    } else {
+                        setStatus(`Connected (${health.database_records} records)`);
                     }
                 } else {
                     setStatus("Backend error", true);
@@ -418,7 +423,7 @@
                 setStatus("Backend offline", true);
                 console.warn("[CropIntel] Backend connection failed:", error.message);
                 showError(
-                    "⚠️ Cannot connect to backend server.\n\n" +
+                    "[ERROR] Cannot connect to backend server.\n\n" +
                     "Please start FastAPI:\n" +
                     "python -m uvicorn price_api:app --reload --port 8000\n\n" +
                     `Backend URL: ${API_BASE}`
