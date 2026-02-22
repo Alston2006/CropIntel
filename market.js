@@ -1,7 +1,7 @@
 /**
  * Market Pulse Engine — Client
  * Real-time commodity dashboard with Chart.js visualizations,
- * auto-refresh, and Gemini AI insight loading.
+ * auto-refresh, and real-time data updates.
  */
 
 (() => {
@@ -183,10 +183,9 @@
             document.getElementById("detailMax").textContent = formatPrice(entry.max_price);
         }
 
-        // Load prediction + chart + insight concurrently
+        // Load prediction + chart concurrently
         loadPrediction(crop);
         loadCropHistory(crop);
-        loadInsight(crop);
     };
 
     // ─── 7. Load Crop History + Render Chart ───
@@ -334,21 +333,7 @@
         }
     }
 
-    // ─── 10. Load Gemini Insight ───
-    async function loadInsight(crop) {
-        const $insight = document.getElementById("detailInsight");
-        $insight.innerHTML = `<div class="insight-loading"><div class="spinner"></div>Analyzing ${crop} with Gemini AI...</div>`;
-
-        try {
-            const res = await fetch(`${API_BASE}/insight/${crop}`);
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
-            $insight.textContent = data.insight || data.structured_summary;
-        } catch (err) {
-            console.error("[Market] loadInsight failed:", err);
-            $insight.textContent = "AI insight unavailable. Check that GEMINI_API_KEY is set.";
-        }
-    }
+    // ─── 10. [Removed: Load Gemini Insight] ───
 
     // ─── 11. Chart Range Switcher ───
     window.switchChartRange = function (days) {

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Market Price Intelligence</title>
+
+<link rel="stylesheet" href="style_log.css">
+
+</head>
+
+<body>
+
+<!-- Background Video -->
+<video autoplay muted loop playsinline class="price-video">
+    <source src="BG_video.mp4" type="video/mp4">
+</video>
+
+<!-- Video Overlay -->
+<div class="price-overlay"></div>
+
+<nav class="main-nav">
+<div class="nav-container">
+<div class="logo">
+<h1>📊 Market Price Per Quintal</h1>
+</div>
+</div>
+</nav>
+
+
+<section class="dashboard-section active">
+
+<div class="container">
+
+<div class="section-header">
+
+<h2>Live Commodity Prices</h2>
+
+<button class="btn-primary" onclick="loadPrices()">
+Refresh Prices
+</button>
+
+</div>
+
+
+<div id="priceGrid" class="products-grid">
+
+<!-- Prices will load here -->
+
+</div>
+
+</div>
+
+</section>
+
+
+<script src="price.js"></script>
+
+</body>
+</html>

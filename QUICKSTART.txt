@@ -1,0 +1,134 @@
+# CropIntel - Ollama Quick Start Checklist
+
+## ✅ What's Been Fixed
+
+- [x] **price_api.py** - Ollama integration complete
+- [x] **Windows compatibility** - All emoji characters removed (encoding safe)
+- [x] **Error handling** - Proper Ollama error responses
+- [x] **Startup diagnostics** - Shows Ollama connection status
+- [x] **Code validation** - No syntax errors, ready to run
+
+## 🚀 Quick Start (Do This Now)
+
+### Step 1: Pull the AI Model (5 minutes)
+```powershell
+# Open PowerShell and run:
+ollama pull gemma2:2b
+```
+Or use the automated setup script:
+```powershell
+& D:\Hackk\CropIntel\setup-ollama.ps1
+```
+
+### Step 2: Start the Backend (30 seconds)
+```powershell
+cd D:\Hackk\CropIntel
+python -m uvicorn price_api:app --reload --port 8000
+```
+
+You'll see startup output like:
+```
+[READY] Connected (gemma2:2b available)
+[READY] Connected (1100 records)
+[OK] Cache TTL: 3600s
+[OK] RAG Engine: Ready
+API endpoints ready at http://localhost:8000
+```
+
+### Step 3: Open Chatbot (10 seconds)
+Open in your browser:
+```
+file:///d:/Hackk/CropIntel/chatbot.html
+```
+
+### Step 4: Test It
+Ask a question:
+- "What is the current price of wheat?"
+- "Which crops are trending?"
+- "Compare rice and maize prices"
+
+## 📋 Verification Checklist
+
+- [ ] Ollama is installed (`ollama --version`)
+- [ ] gemma2:2b is pulled (`ollama list`)
+- [ ] Ollama daemon is running (http://localhost:11434/api/tags loads)
+- [ ] FastAPI backend starts without errors
+- [ ] Chatbot HTML opens in browser
+- [ ] Can send messages and get responses
+- [ ] Responses show [Ollama] tags in backend console
+
+## ⚠️ Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| "Model not found" | Run: `ollama pull gemma2:2b` |
+| "Cannot connect" | Check Ollama is running or restart it |
+| Slow first response | Normal - model is loading (10-15 seconds) |
+| Out of memory | Close other apps, need 8GB+ RAM |
+| Gemma2:2b not in list | Run pull command again |
+
+## 📁 Files Structure
+
+```
+d:\Hackk\CropIntel\
+├── price_api.py           [FIXED] Ollama backend
+├── chatbot.html           [Ready] Frontend UI
+├── chatbot.js             [Ready] Chat logic
+├── chatbot.css            [Ready] Styling
+├── market_data.db         [Ready] 1,100 records
+├── setup-ollama.ps1       [NEW] Auto-setup script
+├── OLLAMA_SETUP.md        [NEW] Detailed guide
+└── QUICKSTART.txt         [THIS FILE]
+```
+
+## 💾 Database Status
+
+- **Database**: market_data.db
+- **Records**: 1,100 agricultural price entries
+- **Crops**: Wheat, Rice, Maize, Cotton, Sugarcane, Onion, Potato, etc.
+- **Status**: ✅ Ready to use
+
+## 🔧 Configuration (Optional)
+
+Edit these in `price_api.py` if needed:
+```python
+# Line 40: Ollama server URL
+OLLAMA_URL = "http://localhost:11434/api/generate"
+
+# Line 41: Model name
+OLLAMA_MODEL = "gemma2:2b"
+
+# Line 44: Response cache duration (seconds)
+RAG_CACHE_TTL = 3600  # 1 hour
+```
+
+## 📊 Expected Performance
+
+| Metric | Value |
+|--------|-------|
+| First response | 10-15 seconds |
+| Subsequent responses | 3-8 seconds |
+| Memory usage | 4-6 GB |
+| CPU usage | 50-80% |
+| Disk space needed | 3.3 GB (model) |
+
+## 🎯 Next Steps
+
+1. **Run pull command**: `ollama pull gemma2:2b`
+2. **Start backend**: `python -m uvicorn price_api:app --reload --port 8000`
+3. **Open chatbot**: `file:///d:/Hackk/CropIntel/chatbot.html`
+4. **Ask questions**: Test the RAG chatbot
+5. **View logs**: Check backend console for [OK]/[ERROR] messages
+
+## 📞 Support Quick Links
+
+- **API Documentation**: http://localhost:8000/docs
+- **Health Check**: http://localhost:8000/health
+- **Chat API**: POST to http://localhost:8000/api/chat
+- **History**: GET http://localhost:8000/api/chat/history
+- **Clear Chat**: POST http://localhost:8000/api/chat/clear
+
+---
+
+**Last Updated**: February 22, 2026  
+**Status**: ✅ READY TO USE

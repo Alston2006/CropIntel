@@ -1,7 +1,7 @@
 """
 Market Pulse Engine — Backend
 FastAPI application providing real-time commodity price intelligence,
-anomaly detection, profit prediction, and Gemini AI insights.
+anomaly detection, and profit prediction.
 """
 
 import os
@@ -34,8 +34,6 @@ app.add_middleware(
 # ─────────────────────────────────────────────
 DATA_GOV_API_KEY = "579b464db66ec23bdd000001e734b1b830854f41600f7e1097b5bdfe"
 DATA_GOV_URL = "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070"
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyB7be51eXtEHVxVunFg30cOy-ys-p1-zz4")
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "market_data.db")
 
 # ─────────────────────────────────────────────
@@ -260,70 +258,7 @@ def refresh_data():
     return {"status": "ok", "inserted": inserted, "timestamp": timestamp}
 
 
-# ─────────────────────────────────────────────
-# Gemini AI Layer (with cache + retry)
-# ─────────────────────────────────────────────
-_insight_cache: dict[str, dict] = {}   # {crop: {"text": str, "ts": float}}
-CACHE_TTL_SEC = 300  # 5 minutes
-MAX_RETRIES = 3
-RETRY_BASE_DELAY = 2  # seconds
 
-
-def get_gemini_insight(crop: str, data: dict) -> str:
-    """Call Gemini to generate a natural-language market insight.
-    Uses in-memory cache and retries with exponential backoff for 429 errors."""
-
-    # ── Check cache first ──
-    cached = _insight_cache.get(crop)
-    if cached and (time.time() - cached["ts"]) < CACHE_TTL_SEC:
-        return cached["text"]
-
-    prompt = (
-        f"You are an agricultural market analyst. Provide a concise, actionable insight "
-        f"for Indian farmers about the commodity '{crop}'. "
-        f"Current data:\n"
-        f"- Modal Price: ₹{data.get('price', 'N/A')}\n"
-        f"- Price Change: {data.get('change_percent', 0)}%\n"
-        f"- Trend: {data.get('trend', 'STABLE')}\n"
-        f"- Anomaly Detected: {'Yes' if data.get('is_anomaly') else 'No'}\n"
-        f"- Prediction: ₹{data.get('predicted_price', 'N/A')} (7-day)\n"
-        f"- Recommendation: {data.get('recommendation', 'WAIT')}\n\n"
-        f"Provide a 3-4 sentence insight covering the current market situation, "
-        f"risk factors, and recommended action. Be specific and data-driven."
-    )
-
-    payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-    }
-
-    # ── Retry loop with exponential backoff ──
-    for attempt in range(MAX_RETRIES):
-        try:
-            resp = requests.post(GEMINI_URL, json=payload, timeout=25)
-
-            # Handle rate limit specifically
-            if resp.status_code == 429:
-                delay = RETRY_BASE_DELAY * (2 ** attempt)  # 2s, 4s, 8s
-                print(f"[Gemini] 429 rate limited for '{crop}', retrying in {delay}s (attempt {attempt + 1}/{MAX_RETRIES})")
-                time.sleep(delay)
-                continue
-
-            resp.raise_for_status()
-            result = resp.json()
-            text = result["candidates"][0]["content"]["parts"][0]["text"].strip()
-
-            # ── Cache the result ──
-            _insight_cache[crop] = {"text": text, "ts": time.time()}
-            return text
-
-        except requests.exceptions.HTTPError as e:
-            if resp.status_code == 429 and attempt < MAX_RETRIES - 1:
-                continue
-            return f"AI insight unavailable (rate limited). Try again in a minute."
-        except Exception as e:
-            return f"AI insight unavailable: {str(e)}"
-
-    return "AI insight temporarily unavailable due to rate limits. The insight will load on your next visit (cached for 5 min)."
 
 
 # ─────────────────────────────────────────────
@@ -473,49 +408,6 @@ def api_recommendation(crop: str):
         "recommendation": prediction["recommendation"],
     }
 
-
-@app.get("/api/market/insight/{crop}")
-def api_insight(crop: str):
-    """Return Gemini AI-generated insight for a crop."""
-    with get_db() as conn:
-        latest = conn.execute(
-            "SELECT * FROM market_prices WHERE crop = ? ORDER BY timestamp DESC LIMIT 1",
-            (crop,),
-        ).fetchone()
-        prices_rows = conn.execute(
-            "SELECT price FROM market_prices WHERE crop = ? ORDER BY timestamp ASC",
-            (crop,),
-        ).fetchall()
-
-    if not latest:
-        raise HTTPException(status_code=404, detail=f"No data found for crop: {crop}")
-
-    prices = [r["price"] for r in prices_rows]
-    prediction = predict_prices(prices)
-
-    data_for_ai = {
-        "price": latest["price"],
-        "change_percent": latest["change_percent"],
-        "trend": latest["trend"],
-        "is_anomaly": latest["is_anomaly"],
-        "predicted_price": prediction["predictedPrice"],
-        "recommendation": prediction["recommendation"],
-    }
-
-    insight = get_gemini_insight(crop, data_for_ai)
-
-    return {
-        "crop": crop,
-        "insight": insight,
-        "data": data_for_ai,
-        "structured_summary": (
-            f"{crop} price is ₹{latest['price']} in {latest['location']}. "
-            f"Change: {latest['change_percent']}%. Trend: {latest['trend']}. "
-            f"Anomaly: {'Detected' if latest['is_anomaly'] else 'Not detected'}. "
-            f"7-day prediction: ₹{prediction['predictedPrice']}. "
-            f"Recommendation: {prediction['recommendation']}."
-        ),
-    }
 
 
 @app.get("/api/market/crops")

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropIntel Market Intelligence </title>
+    <meta name="description"
+        content="Real-time agricultural commodity price intelligence with anomaly detection, trend analysis, and profit prediction.">
+    <link rel="stylesheet" href="market.css">
+    <link rel="icon" type="image/x-icon" sizes="16x16" href="assets/sheaf-rice.png" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+    <!-- ─── Navigation ─── -->
+    <nav class="market-nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-brand">
+                <div class="nav-brand-icon">📈</div>
+                <h1>Market Pulse <span>by AgroConnect</span></h1>
+            </a>
+            <div class="nav-actions">
+                <div class="nav-status">
+                    <div class="status-dot"></div>
+                    <span id="lastUpdate">Initializing...</span>
+                </div>
+                <button class="btn-refresh" id="btnRefresh" onclick="refreshData()">
+                    <span class="refresh-icon">⟳</span>
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ─── Ticker Strip ─── -->
+    <div class="ticker-strip">
+        <div class="ticker-track" id="tickerTrack">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <!-- ─── Stats Overview ─── -->
+    <div class="market-main">
+        <div class="market-primary">
+
+            <!-- Stats Row -->
+            <div class="stats-row" id="statsRow">
+                <div class="stat-card green">
+                    <div class="stat-label">Total Crops</div>
+                    <div class="stat-value green" id="statTotalCrops">—</div>
+                    <div class="stat-sub">Tracked commodities</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-label">Trending Up</div>
+                    <div class="stat-value green" id="statUp">—</div>
+                    <div class="stat-sub">Price increasing</div>
+                </div>
+                <div class="stat-card red">
+                    <div class="stat-label">Trending Down</div>
+                    <div class="stat-value red" id="statDown">—</div>
+                    <div class="stat-sub">Price decreasing</div>
+                </div>
+                <div class="stat-card amber">
+                    <div class="stat-label">Anomalies</div>
+                    <div class="stat-value amber" id="statAnomalies">—</div>
+                    <div class="stat-sub">Unusual activity</div>
+                </div>
+            </div>
+
+            <!-- Chart Panel -->
+            <div class="panel" id="chartPanel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="icon">📊</span>
+                        <span id="chartTitle">Price Trend — Select a Crop</span>
+                    </div>
+                    <div class="chart-toolbar">
+                        <button class="chart-btn active" data-days="7" onclick="switchChartRange(7)">7D</button>
+                        <button class="chart-btn" data-days="30" onclick="switchChartRange(30)">30D</button>
+                        <button class="chart-btn" data-days="100" onclick="switchChartRange(100)">ALL</button>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="chart-container">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crop Grid -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="icon">🌾</span>
+                        Commodity Prices
+                    </div>
+                    <span class="panel-badge live">● LIVE</span>
+                </div>
+                <div class="panel-body">
+                    <div class="crop-grid" id="cropGrid">
+                        <!-- Skeleton loading -->
+                        <div class="skeleton skeleton-card"></div>
+                        <div class="skeleton skeleton-card"></div>
+                        <div class="skeleton skeleton-card"></div>
+                        <div class="skeleton skeleton-card"></div>
+                        <div class="skeleton skeleton-card"></div>
+                        <div class="skeleton skeleton-card"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ─── Sidebar ─── -->
+        <div class="market-sidebar">
+
+            <!-- Detail Panel -->
+            <div class="panel" id="detailPanel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="icon">🔍</span>
+                        Crop Analysis
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="detail-placeholder" id="detailPlaceholder">
+                        <div class="icon">📋</div>
+                        <p>Click on a commodity card to view detailed analysis, price predictions, and market anomalies.</p>
+                    </div>
+                    <div class="detail-content" id="detailContent">
+                        <div class="detail-crop-header">
+                            <span class="detail-crop-name" id="detailCropName">—</span>
+                            <span class="crop-trend-badge" id="detailTrendBadge">—</span>
+                        </div>
+
+                        <div class="detail-metrics">
+                            <div class="detail-metric">
+                                <div class="detail-metric-label">Modal Price</div>
+                                <div class="detail-metric-value" id="detailPrice">—</div>
+                            </div>
+                            <div class="detail-metric">
+                                <div class="detail-metric-label">Change</div>
+                                <div class="detail-metric-value" id="detailChange">—</div>
+                            </div>
+                            <div class="detail-metric">
+                                <div class="detail-metric-label">Min Price</div>
+                                <div class="detail-metric-value" id="detailMin">—</div>
+                            </div>
+                            <div class="detail-metric">
+                                <div class="detail-metric-label">Max Price</div>
+                                <div class="detail-metric-value" id="detailMax">—</div>
+                            </div>
+                            <div class="detail-metric">
+                                <div class="detail-metric-label">Predicted (7D)</div>
+                                <div class="detail-metric-value" id="detailPredicted">—</div>
+                            </div>
+                            <div class="detail-metric">
+                                <div class="detail-metric-label">Confidence</div>
+                                <div class="detail-metric-value" id="detailConfidence">—</div>
+                            </div>
+                        </div>
+
+                        <div class="recommendation-badge wait" id="detailRecommendation">
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anomaly Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="icon">⚠️</span>
+                        Anomaly Alerts
+                    </div>
+                    <span class="panel-badge alert">WATCH</span>
+                </div>
+                <div class="panel-body">
+                    <div class="anomaly-list" id="anomalyList">
+                        <div class="no-anomalies">
+                            <div class="icon">✅</div>
+                            <p>No anomalies detected</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="market.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropIntel Advisor — Agricultural AI Chatbot</title>
+    <meta name="description"
+        content="AI-powered agricultural chatbot providing real-time market insights, price recommendations, and farming advice.">
+    <link rel="stylesheet" href="chatbot.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/crop.png" />
+</head>
+
+<body>
+    <!-- Background Video -->
+    <video autoplay muted loop playsinline class="chatbot-video">
+        <source src="BG_video.mp4" type="video/mp4">
+    </video>
+
+    <!-- Video Overlay -->
+    <div class="chatbot-overlay"></div>
+
+    <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="chat-icon">🤖</div>
+                    <div class="header-text">
+                        <h1 class="chat-title">CropIntel Advisor</h1>
+                        <p class="chat-subtitle">AI-Powered Market Intelligence</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button id="btnClearHistory" class="btn-icon" title="Clear History">
+                        <span>🗑️</span>
+                    </button>
+                    <button id="btnMinimize" class="btn-icon" title="Minimize">
+                        <span>−</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="status-indicator" id="statusIndicator">●</span>
+            <span class="status-text" id="statusText">Ready</span>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="message-container welcome-message">
+                <div class="message assistant">
+                    <div class="message-icon">🌾</div>
+                    <div class="message-content">
+                        <p><strong>Welcome to CropIntel Advisor!</strong></p>
+                        <p>I'm your AI-powered agricultural advisor powered by real-time market data. Ask me about:</p>
+                        <ul>
+                            <li>📊 Current crop prices and trends</li>
+                            <li>💰 When to buy or sell</li>
+                            <li>📈 Market comparisons (region vs region)</li>
+                            <li>🔔 Price anomalies and alerts</li>
+                            <li>🌱 Seasonal farming recommendations</li>
+                        </ul>
+                        <p style="color: #888; font-size: 0.9em; margin-top: 0.5rem;">
+                            Powered by Gemini AI + Live Market Data
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typingIndicator" style="display: none;">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="chat-input-area">
+            <div class="input-suggestions" id="inputSuggestions" style="display: none;">
+                <div class="suggestion-title">Suggested Questions:</div>
+                <div class="suggestions-grid">
+                    <button class="suggestion-btn" data-query="What's the current price of wheat?">
+                        📊 Wheat prices
+                    </button>
+                    <button class="suggestion-btn" data-query="Should I sell my rice now or wait?">
+                        💰 Rice selling
+                    </button>
+                    <button class="suggestion-btn" data-query="Compare potato prices in Punjab vs Haryana">
+                        📈 Price comparison
+                    </button>
+                    <button class="suggestion-btn" data-query="What crops have price anomalies today?">
+                        🔔 Anomalies
+                    </button>
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <input type="text" id="chatInput" class="chat-input" placeholder="Ask about crop prices...">
+                <button id="btnSend" class="btn-send" title="Send message">
+                    <span>➤</span>
+                </button>
+            </div>
+            <div class="input-hints">
+                <span class="hint-text" id="hintText">💡 Ask about prices, trends, or farming advice</span>
+            </div>
+        </div>
+
+        <!-- Error Display -->
+        <div class="error-message" id="errorMessage" style="display: none;"></div>
+    </div>
+
+    <!-- Quick Access Menu (Optional) -->
+    <div class="quick-menu" id="quickMenu">
+        <button class="quick-menu-btn" id="btnChat" title="Chat">💬</button>
+        <button class="quick-menu-btn" id="btnRefresh" title="Refresh Data">🔄</button>
+        <button class="quick-menu-btn" id="btnSettings" title="Settings">⚙️</button>
+    </div>
+
+    <script src="chatbot.js"></script>
+</body>
+
+</html>
